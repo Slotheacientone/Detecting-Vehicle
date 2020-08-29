@@ -15,36 +15,46 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class CarDetection {
-    public void detect(String file, ImageView imageVIew) {
-
+    public void detect(String file, ImageView imageView) {
+        //Load libary
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //Get video
         VideoCapture videoCapture = new VideoCapture(file);
+        //Get fps of video
         double fps = videoCapture.get(Videoio.CAP_PROP_FPS);
         System.out.println("Fps: " + fps);
+        //Get trained file
         CascadeClassifier cascadeClassifier = new CascadeClassifier("cars.xml");
-        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
+        //Create a runnable that detect car every frame
         Runnable frameGraber = new Runnable() {
             @Override
             public void run() {
+                //get a frame from video
                 Mat frame = new Mat();
                 videoCapture.read(frame);
+                // gray scale frame
                 Mat grayScaleFrame = new Mat();
                 Imgproc.cvtColor(frame, grayScaleFrame, Imgproc.COLOR_BGR2GRAY);
+                //detect a car
                 MatOfRect carDetections = new MatOfRect();
                 cascadeClassifier.detectMultiScale(grayScaleFrame, carDetections);
+                //with every car detected draw a rectangle around it
                 for (Rect car : carDetections.toArray()) {
                     Imgproc.rectangle(frame, car, new Scalar(0, 255, 0, 255));
                     Size textSize = Imgproc.getTextSize("Car", Imgproc.FONT_HERSHEY_PLAIN, 0.8, 1, null);
-                    Imgproc.rectangle(frame, new Point(car.x, car.y - textSize.height-2), new Point(car.x + textSize.width, car.y-1), new Scalar(0, 255, 0, 255), -1);
-                    Imgproc.putText(frame, "Car", new Point(car.x, car.y-1), Imgproc.FONT_HERSHEY_PLAIN, 0.8, new Scalar(0, 0, 0, 0), 1);
+                    Imgproc.rectangle(frame, new Point(car.x, car.y - textSize.height - 2), new Point(car.x + textSize.width, car.y - 1), new Scalar(0, 255, 0, 255), -1);
+                    Imgproc.putText(frame, "Car", new Point(car.x, car.y - 1), Imgproc.FONT_HERSHEY_PLAIN, 0.8, new Scalar(0, 0, 0, 0), 1);
 
                 }
-                imageVIew.setImage(matToJavaFXImage(frame));
+                //show the frame on ImageView
+                imageView.setImage(matToJavaFXImage(frame));
             }
         };
+        //Schedule to run frameGraber
+        ScheduledExecutorService timer = Executors.newSingleThreadScheduledExecutor();
         timer.scheduleAtFixedRate(frameGraber, 0, (long) (1000 / fps), TimeUnit.MILLISECONDS);
     }
-
+    //Convert Mat to javaFXImage
     private Image matToJavaFXImage(Mat original) {
         MatOfByte matOfByte = new MatOfByte();
         Imgcodecs.imencode(".bmp", original, matOfByte);
