@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<AnchorPane prefHeight="454.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
       <MenuBar prefHeight="29.0" prefWidth="600.0">
         <menus>
@@ -18,5 +20,10 @@
         </menus>
       </MenuBar>
       <ImageView fx:id="imageVIew" fitHeight="371.0" fitWidth="600.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="label" layoutX="14.0" layoutY="400.0" prefHeight="44.0" prefWidth="136.0" text="Car:">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -2,6 +2,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,6 +14,8 @@ public class Controller {
 
     @FXML
     private ImageView imageVIew;
+    @FXML
+    private Label label;
 
     @FXML
     public void handleOpenMenu(ActionEvent event) {
@@ -21,7 +24,7 @@ public class Controller {
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showOpenDialog(new Stage());
         CarDetection carDetection = new CarDetection();
-        carDetection.detect(file.getAbsolutePath(), imageVIew);
+        carDetection.detect(file.getAbsolutePath(), imageVIew, label);
     }
 
 }
