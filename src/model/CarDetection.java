@@ -30,7 +30,7 @@ public class CarDetection {
         System.out.println("Fps: " + fps);
         //Get trained file
         CascadeClassifier cascadeClassifier = new CascadeClassifier("cars.xml");
-        CentroidTracker centroidTracker = new CentroidTracker(40);
+        CentroidTracker centroidTracker = new CentroidTracker(20);
         //Create a runnable that detect car every frame
         Runnable frameGraber = new Runnable() {
             @Override
