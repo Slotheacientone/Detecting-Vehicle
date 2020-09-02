@@ -45,10 +45,10 @@ public class ObjectTracker {
     }
 
     public void addDisappearFrame() {
-        disappearFrame = disappearFrame++;
+        disappearFrame++;
     }
     public void removeDisappearFrame() {
-        disappearFrame = disappearFrame--;
+        disappearFrame--;
     }
 
     @Override
