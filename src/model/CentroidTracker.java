@@ -75,9 +75,9 @@ public class CentroidTracker {
         //update new location for old object
         for(EuclideanDistance euclideanDistance:listDistance){
             if(!lock.contains(euclideanDistance.getNewObject())){
-                euclideanDistance.getRegisteredObject().setX(euclideanDistance.getNewObject().getX());
-                euclideanDistance.getRegisteredObject().setY(euclideanDistance.getNewObject().getY());
-                euclideanDistance.getRegisteredObject().removeDisappearFrame();
+                euclideanDistance.getOldObject().setX(euclideanDistance.getNewObject().getX());
+                euclideanDistance.getOldObject().setY(euclideanDistance.getNewObject().getY());
+                euclideanDistance.getOldObject().removeDisappearFrame();
                 lock.add(euclideanDistance.getNewObject());
             }
         }

@@ -1,18 +1,18 @@
 package model;
 
 public class EuclideanDistance implements Comparable<EuclideanDistance>{
-    private ObjectTracker registeredObject;
+    private ObjectTracker oldObject;
     private ObjectTracker newObject;
     private double distance;
 
     public EuclideanDistance(ObjectTracker registeredObject, ObjectTracker newObject, double distance) {
-        this.registeredObject = registeredObject;
+        this.oldObject = registeredObject;
         this.newObject = newObject;
         this.distance = distance;
     }
 
-    public ObjectTracker getRegisteredObject() {
-        return registeredObject;
+    public ObjectTracker getOldObject() {
+        return oldObject;
     }
 
     public ObjectTracker getNewObject() {
