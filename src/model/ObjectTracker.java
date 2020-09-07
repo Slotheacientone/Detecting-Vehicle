@@ -47,8 +47,8 @@ public class ObjectTracker {
     public void addDisappearFrame() {
         disappearFrame++;
     }
-    public void removeDisappearFrame() {
-        disappearFrame--;
+       public void removeDisappearFrame() {
+        this.disappearFrame=0;
     }
 
     @Override

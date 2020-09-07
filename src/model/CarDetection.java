@@ -30,7 +30,7 @@ public class CarDetection {
         System.out.println("Fps: " + fps);
         //Get trained file
         CascadeClassifier cascadeClassifier = new CascadeClassifier("cars.xml");
-        CentroidTracker centroidTracker = new CentroidTracker(100);
+        CentroidTracker centroidTracker = new CentroidTracker(50);
         //Create a runnable that detect car every frame
         Runnable frameGraber = new Runnable() {
             @Override
@@ -46,10 +46,10 @@ public class CarDetection {
                 cascadeClassifier.detectMultiScale(grayScaleFrame, carDetections);
                 //with every car detected draw a rectangle around it
                 for (Rect car : carDetections.toArray()) {
-                    Imgproc.rectangle(frame, car, new Scalar(0, 255, 0, 255));
+                    Imgproc.rectangle(frame, car, new Scalar(0, 255, 0));
                     Size textSize = Imgproc.getTextSize("Car", Imgproc.FONT_HERSHEY_PLAIN, 0.8, 1, null);
-                    Imgproc.rectangle(frame, new Point(car.x, car.y - textSize.height - 2), new Point(car.x + textSize.width, car.y - 1), new Scalar(0, 255, 0, 255), -1);
-                    Imgproc.putText(frame, "Car", new Point(car.x, car.y - 1), Imgproc.FONT_HERSHEY_PLAIN, 0.8, new Scalar(0, 0, 0, 0), 1);
+                    Imgproc.rectangle(frame, new Point(car.x, car.y - textSize.height - 2), new Point(car.x + textSize.width, car.y), new Scalar(0, 255, 0), -1);
+                    Imgproc.putText(frame, "Car", new Point(car.x, car.y - 1), Imgproc.FONT_HERSHEY_PLAIN, 0.8, new Scalar(0, 0, 0), 1);
                 }
                 centroidTracker.update(carDetections);
                 int count = centroidTracker.getCountObject();

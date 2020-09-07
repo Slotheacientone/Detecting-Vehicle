@@ -7,24 +7,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CentroidTracker {
-    private final ArrayList<ObjectTracker> listObject;
+    private final ArrayList<ObjectTracker> listOldObject;
     private final int maxDisappearFrame;
     private int countObject;
 
     public CentroidTracker(int maxDisappearFrame) {
         this.countObject = 0;
         this.maxDisappearFrame = maxDisappearFrame;
-        listObject = new ArrayList<>();
+	    listOldObject = new ArrayList<>();
     }
+    
 //calculate euclidean distance between 2 objects
     public EuclideanDistance calculateEuclideanDistance(ObjectTracker o1, ObjectTracker o2) {
         double distance = Math.sqrt((o1.getX() - o2.getX()) * (o1.getX() - o2.getX()) + (o1.getY() - o2.getY()) * (o1.getY() - o2.getY()));
-        return new EuclideanDistance(o1, o2, distance);
+	return new EuclideanDistance(o1, o2, distance);
     }
 //generate list smallest distance between old object and new object
-    public ArrayList<EuclideanDistance> generateListDistance(ArrayList<ObjectTracker> listNewObject) {
+    public ArrayList<EuclideanDistance> generateListSmallestDistance(ArrayList<ObjectTracker> listNewObject) {
         ArrayList<EuclideanDistance> listDistance = new ArrayList<>();
-        for (ObjectTracker oldObject : listObject) {
+        for (ObjectTracker oldObject : listOldObject) {
             EuclideanDistance smallestDistance = null;
             double distance = Double.MAX_VALUE;
             for (ObjectTracker newObject : listNewObject) {
@@ -32,7 +33,7 @@ public class CentroidTracker {
                 if (distance > e.getDistance()) {
                     smallestDistance = e;
                     distance = e.getDistance();
-                }
+		}
             }
             listDistance.add(smallestDistance);
         }
@@ -43,33 +44,36 @@ public class CentroidTracker {
     public void update(MatOfRect matOfRect) {
         //return if there is no new object detected
         if(matOfRect.toArray().length==0){
+            //method reference
+            listOldObject.forEach(ObjectTracker::addDisappearFrame);
             return;
         }
         //create list of object detected
-        ArrayList<ObjectTracker> temp = new ArrayList<>();
+        ArrayList<ObjectTracker> listNewObject = new ArrayList<>();
         for (Rect rect : matOfRect.toArray()) {
-            double x = rect.x + rect.height / 2.0;
-            double y = rect.y + rect.width / 2.0;
+            double x = rect.x + rect.width / 2.0;
+            double y = rect.y + rect.height / 2.0;
             ObjectTracker objectTracker = new ObjectTracker();
             objectTracker.setX(x);
             objectTracker.setY(y);
-            temp.add(objectTracker);
+            listNewObject.add(objectTracker);
         }
         //if there is no old object then register all new object
-        if (listObject.isEmpty()) {
-            for (ObjectTracker objectTracker : temp) {
+        if (listOldObject.isEmpty()) {
+            for (ObjectTracker objectTracker : listNewObject) {
                 countObject++;
                 objectTracker.setObjectID(countObject);
-                listObject.add(objectTracker);
+                listOldObject.add(objectTracker);
             }
             return;
         }
         //remove old object have disappear frame count = maxDisappearFrame
-        listObject.removeIf(objectTracker -> objectTracker.getDisappearFrame() >= maxDisappearFrame);
+        //lambad expression
+        listOldObject.removeIf(objectTracker -> objectTracker.getDisappearFrame() >= maxDisappearFrame);
         //add disappear frame count for all old object
-        listObject.forEach(ObjectTracker::addDisappearFrame);
+        listOldObject.forEach(ObjectTracker::addDisappearFrame);
         //create list of smallest distance between old object and new object
-        ArrayList<EuclideanDistance> listDistance = generateListDistance(temp);
+        ArrayList<EuclideanDistance> listDistance = generateListSmallestDistance(listNewObject);
         //create list of new object that already updated
         ArrayList<ObjectTracker> lock = new ArrayList<>();
         //update new location for old object
@@ -82,12 +86,12 @@ public class CentroidTracker {
             }
         }
         //if there is object detected that not already update then register it
-        if(lock.size()!=temp.size()){
-            for(ObjectTracker objectTracker:temp){
+        if(lock.size()!=listNewObject.size()){
+            for(ObjectTracker objectTracker:listNewObject){
                 if(!lock.contains(objectTracker)){
                     countObject++;
                     objectTracker.setObjectID(countObject);
-                    listObject.add(objectTracker);
+                    listOldObject.add(objectTracker);
                 }
             }
         }
