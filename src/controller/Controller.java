@@ -19,9 +19,12 @@ public class Controller {
 
     @FXML
     public void handleOpenMenu(ActionEvent event) {
+        //declare extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Video files (*.avi)", "*.avi");
         FileChooser fileChooser = new FileChooser();
+        //add extension filter
         fileChooser.getExtensionFilters().add(extFilter);
+        //show choosing file dialog
         File file = fileChooser.showOpenDialog(new Stage());
         CarDetection carDetection = new CarDetection();
         carDetection.detect(file.getAbsolutePath(), imageVIew, label);

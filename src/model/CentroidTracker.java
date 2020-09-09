@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CentroidTracker {
-    private final ArrayList<ObjectTracker> listOldObject;
-    private final int maxDisappearFrame;
+    private ArrayList<ObjectTracker> listOldObject;
+    private int maxDisappearFrame;
     private int countObject;
 
     public CentroidTracker(int maxDisappearFrame) {

@@ -25,7 +25,7 @@ public class CarDetection {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         //Get video
         VideoCapture videoCapture = new VideoCapture(file);
-        //Get fps of video
+        //Get frame per second of video
         double fps = videoCapture.get(Videoio.CAP_PROP_FPS);
         System.out.println("Fps: " + fps);
         //Get trained file
