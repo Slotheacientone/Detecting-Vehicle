@@ -1,2 +1,2 @@
 # Detecting-Vehicle
-Detecting and tracking car using java and opencv
+Detecting and tracking car writing java using opencv
